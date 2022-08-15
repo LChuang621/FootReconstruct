@@ -9,6 +9,6 @@ cd build
 
 cmake ..
 
-#cmd /C "$env:VSPATH\MSBuild\Current\Bin\MSBuild.exe" .\asc2stl.sln /p:Configuration=Release
+cmd /C "$env:VSPATH\MSBuild\Current\Bin\MSBuild.exe" .\FootReconstruct.sln /p:Configuration=Release
 
 cd ..

@@ -33,5 +33,5 @@
 
 
 .vs/
-build/
+build*/
 data/
