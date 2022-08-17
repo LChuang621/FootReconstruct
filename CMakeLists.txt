@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(FootReconstruct)
 
+set(CMAKE_CXX_FLAGS "-march=native ${CMAKE_CXX_FLAGS}")
+
 find_package(PCL 1.7 REQUIRED COMPONENTS common io)
 
 message(STATUS "Using PCL ${PCL_VERSION}")
