@@ -2,7 +2,7 @@
 //
 
 #include "FilterGround.h"
-
+#include "Coordinate.h"
 using std::cout;
 using std::endl;
 
@@ -43,6 +43,11 @@ bool FilterGround(pcl::PointCloud<pcl::PointXYZRGB>::Ptr& cloud, pcl::PointCloud
 	seg.setDistanceThreshold(8);
 	seg.setInputCloud(cloud);
 	seg.segment(*inliers, *coefficients);
+
+	cout << " a is " << coefficients->values[0] << endl
+		<< " b is " << coefficients->values[1] << endl
+		<< " c is " << coefficients->values[2] << endl
+		<< " d is " << coefficients->values[3] << endl;
 
 	if (inliers->indices.size() == 0)
 	{
@@ -144,10 +149,10 @@ int main()
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_foot(new pcl::PointCloud<pcl::PointXYZRGB>);
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ground(new pcl::PointCloud<pcl::PointXYZRGB>);
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_filtered(new pcl::PointCloud<pcl::PointXYZRGB>);
-    std::string pointcloud = "D:/work/reconstruct/data/origin_fullcloud/3dpoints_object.ply";
+    std::string pointcloud = "D:/work/reconstruct/data/origin_fullcloud/cloud_0815.ply";
 
     cout << pointcloud << endl;
-	if (pcl::io::loadPLYFile<pcl::PointXYZRGB>(pointcloud, *cloud_foot) == -1)
+	if (pcl::io::loadPLYFile<pcl::PointXYZRGB>(pointcloud, *cloud) == -1)
 	{
 		PCL_ERROR("Read file fail!\n");
 		return -1;
@@ -163,6 +168,18 @@ int main()
 #endif
 
 	
+	//Eigen::Vector3f groud_normal, camera_normal;
+	//groud_normal << 0.969502, 0.000401399, 0.245082;
+	//camera_normal << 0, 0, 1;
+	//Eigen::Matrix4f transformed_ =  CreateRotateMatrix(groud_normal, camera_normal);
+	//cout << transformed_.matrix() << endl;
+
+
+
+
+
+
+
 
     return 0;
 }
