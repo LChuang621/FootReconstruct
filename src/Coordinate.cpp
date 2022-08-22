@@ -1,7 +1,9 @@
 #include "Coordinate.h"
 
+
 using std::cout;
 using std::endl;
+using std::vector;
 
 
 
@@ -31,4 +33,27 @@ Eigen::Matrix4f CreateRotateMatrix(Eigen::Vector3f& before, Eigen::Vector3f& aft
     rotationMatrix(2, 2) = cos(angle) + p_rotate[2] * p_rotate[2] * (1 - cos(angle));
 
     return rotationMatrix;
+}
+
+
+
+
+bool GetCenterCoordinate(pcl::PointCloud<pcl::PointXYZRGB>::Ptr& cloud)
+{
+    
+    double mean;	//点云均值
+    double stddev;	//点云标准差
+    vector<float> vec_x,vec_y;
+    for (auto i=0; i< cloud->size(); i++)
+    {
+        vec_x.emplace_back(cloud->points[i].x);
+        vec_y.emplace_back(cloud->points[i].y);
+    }
+
+    pcl::getMeanStd(vec_x, mean, stddev);
+    cout <<"x mean is " << mean << endl;
+
+    pcl::getMeanStd(vec_y, mean, stddev);
+    cout << "y mean is " << mean << endl;
+    return true;
 }

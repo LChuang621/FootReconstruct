@@ -15,4 +15,10 @@ include_directories(${PCL_INCLUDE_DIRS} "${PROJECT_SOURCE_DIR}/include" ${PCL_LI
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 ADD_EXECUTABLE(FootReconstruct ${PROJECT_SOURCE_DIR}/src/FilterGround.cpp ${PROJECT_SOURCE_DIR}/src/Coordinate.cpp ${PROJECT_SOURCE_DIR}/src/Boundryextract.cpp)
-target_link_libraries(FootReconstruct ${PCL_LIBRARIES} pcl_segmentationd.lib pcl_filtersd.lib pcl_visualizationd.lib)
+target_link_libraries(FootReconstruct ${PCL_LIBRARIES}
+	pcl_segmentationd.lib
+	pcl_filtersd.lib
+	pcl_visualizationd.lib
+	pcl_searchd.lib
+	pcl_kdtreed.lib
+	pcl_featuresd.lib)

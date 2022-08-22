@@ -3,6 +3,8 @@
 
 #include "FilterGround.h"
 #include "Coordinate.h"
+#include "Boundryextract.h"
+
 using std::cout;
 using std::endl;
 
@@ -147,9 +149,10 @@ int main()
 {
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_foot(new pcl::PointCloud<pcl::PointXYZRGB>);
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr foot_lean(new pcl::PointCloud<pcl::PointXYZRGB>);
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ground(new pcl::PointCloud<pcl::PointXYZRGB>);
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_filtered(new pcl::PointCloud<pcl::PointXYZRGB>);
-    std::string pointcloud = "D:/work/reconstruct/data/origin_fullcloud/cloud_0815.ply";
+    std::string pointcloud = "D:/work/reconstruct/data/origin_fullcloud/foot_clean.ply";
 
     cout << pointcloud << endl;
 	if (pcl::io::loadPLYFile<pcl::PointXYZRGB>(pointcloud, *cloud) == -1)
@@ -160,7 +163,8 @@ int main()
 
 
 	//FilterGround(cloud, cloud_foot, cloud_ground); // 分离地面和双脚
-	//FootOutlierRemoval(cloud_foot, cloud_filtered); // 双脚离群点滤波
+	//FootOutlierRemoval(cloud_foot, foot_lean); // 双脚离群点滤波
+	//BoundryExtract(foot_lean, cloud_filtered); // 提取边界
 #if 0
 	pcl::PCDWriter writer;
 	writer.write<pcl::PointXYZRGB>("ground.pcd", *cloud_ground, false);
@@ -175,9 +179,7 @@ int main()
 	//cout << transformed_.matrix() << endl;
 
 
-
-
-
+	//GetCenterCoordinate(cloud);
 
 
 
