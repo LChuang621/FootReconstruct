@@ -86,7 +86,12 @@ bool BoundryExtract(pcl::PointCloud<pcl::PointXYZRGB>::Ptr& cloud_in, pcl::Point
 	}
 	std::cout << "boudary size is£º" << countBoundaries << std::endl;
 	//  pcl::io::savePCDFileASCII("boudary.pcd",boundPoints);
-	pcl::io::savePCDFileASCII("boudary212.pcd", *boundPoints);
-	pcl::io::savePCDFileASCII("NoBoundpoints.pcd", noBoundPoints);
+	//pcl::io::savePCDFileASCII("boudary212.pcd", *boundPoints);
+	//pcl::io::savePCDFileASCII("NoBoundpoints.pcd", noBoundPoints);
+
+	pcl::PLYWriter writer2;
+	writer2.write<pcl::PointXYZ>("boudary.ply", *boundPoints, false);
+
+
 	return true;
 }

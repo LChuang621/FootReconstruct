@@ -38,22 +38,47 @@ Eigen::Matrix4f CreateRotateMatrix(Eigen::Vector3f& before, Eigen::Vector3f& aft
 
 
 
-bool GetCenterCoordinate(pcl::PointCloud<pcl::PointXYZRGB>::Ptr& cloud)
+bool GetCenterCoordinate(pcl::PointCloud<pcl::PointXYZRGB>::Ptr& cloud, pcl::ModelCoefficients::Ptr& coefficient, Eigen::Isometry3f Trans)
 {
+    Eigen::Vector3f groud_normal, camera_normal;
+    groud_normal << coefficient->values[0], coefficient->values[1], coefficient->values[2];
+    camera_normal << 0, 0, 1;
+    Eigen::Matrix4f transformed = CreateRotateMatrix(groud_normal, camera_normal);
+    //cout <<"transdormed 1 =" << std::endl << std::fixed << transformed.matrix() << endl;
+
+
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_projected(new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::ProjectInliers<pcl::PointXYZRGB> proj;
+    proj.setModelType(pcl::SACMODEL_PLANE);
+    proj.setInputCloud(cloud);
+    proj.setModelCoefficients(coefficient);
+    proj.filter(*cloud_projected);
+
+    Eigen::Vector4f centroid;
+    pcl::compute3DCentroid(*cloud_projected, centroid);
+    //std::cout << "地面中心坐标（"
+    //    << centroid[0] << ","
+    //    << centroid[1] << ","
+    //    << centroid[2] << ")." << std::endl;
+
+    Eigen::Matrix3f key;
+
+    key << 1.0f, 0.0f, 0.0f,
+
+        0.0f, 1.0f, 0.0f,
+
+        0.0f, 0.0f, 1.0f;
+    Eigen::Vector3f t = Eigen::Vector3f(-centroid[0], -centroid[1], -centroid[2]);
+
+    Eigen::Isometry3f T = Eigen::Isometry3f::Identity();
     
-    double mean;	//点云均值
-    double stddev;	//点云标准差
-    vector<float> vec_x,vec_y;
-    for (auto i=0; i< cloud->size(); i++)
-    {
-        vec_x.emplace_back(cloud->points[i].x);
-        vec_y.emplace_back(cloud->points[i].y);
-    }
+    Eigen::AngleAxisf rotation_vector;
+    rotation_vector.fromRotationMatrix(key);
+    T.rotate(rotation_vector);
+    T.pretranslate(t);
 
-    pcl::getMeanStd(vec_x, mean, stddev);
-    cout <<"x mean is " << mean << endl;
+    Trans = transformed * T.matrix();
+    cout << "transdormed =" << std::endl << std::fixed << Trans.matrix() << endl;
 
-    pcl::getMeanStd(vec_y, mean, stddev);
-    cout << "y mean is " << mean << endl;
     return true;
 }
