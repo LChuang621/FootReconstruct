@@ -688,6 +688,13 @@ int main()
 
 	}
 
+#else
+	if (pcl::io::loadPCDFile<pcl::PointXYZ>(pointcloud, *cloud2) == -1)
+	{
+		PCL_ERROR("Read file fail!\n");
+		return -1;
+	}
+#endif
 
 	// 形态学处理，使断开的轮廓变成连通轮廓
 	cv::Mat element, erode_rgb, dilate_rgb;
